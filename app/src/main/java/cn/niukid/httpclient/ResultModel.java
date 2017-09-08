@@ -1,4 +1,4 @@
-package cn.niukid.http;
+package cn.niukid.httpclient;
 
 import java.net.HttpURLConnection;
 

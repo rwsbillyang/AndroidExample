@@ -1,5 +1,7 @@
-package cn.niukid.myexampleapplication.activity;
+package cn.niukid.activity;
 
+import android.arch.lifecycle.LifecycleRegistry;
+import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -17,7 +19,10 @@ import cn.niukid.application.AppComponent;
  *
  * Created by bill on 8/21/17.
  * */
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity implements LifecycleRegistryOwner {
+
+    LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
+
 
     /**
      * 凡以此类作为父类的Activity不再需在onCreate中进行如下的ButterKnife绑定，直接可在子类中进行绑定各种view
@@ -33,6 +38,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         ARouter.getInstance().inject(this);
     }
+
+
+    @Override
+    public LifecycleRegistry getLifecycle() {
+        return lifecycleRegistry;
+    }
+
     /**
      * 指定layoutId资源标识符后，不再需在onCreate中调用setContentView
      * */

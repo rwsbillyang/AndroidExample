@@ -19,7 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.ReposListActivity" android:label="@string/load_data_title"/>
+        <activity android:name=".repo.ReposListActivity" android:label="@string/load_data_title"/>
         <activity android:name=".activity.ImageActivity" android:label="@string/load_image_title"/>
         <activity android:name=".note.NoteActivity" android:label="@string/greendao_title" />
 

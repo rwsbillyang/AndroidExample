@@ -1,4 +1,4 @@
-package cn.niukid.myexampleapplication.activity;
+package cn.niukid.myexampleapplication.repo;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,11 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.List;
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.niukid.myexampleapplication.bean.Repo;
 import cn.niukid.myexampleapplication.R;
 
 /**
@@ -19,13 +19,13 @@ import cn.niukid.myexampleapplication.R;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.RepoViewHolder> {
 
-    private ArrayList<Repo> mRepos;
+    private List<Repo> mRepos;
 
     public ListAdapter() {
         mRepos = new ArrayList<>();
     }
 
-    public void setRepos(ArrayList<Repo> repos) {
+    public void setRepos(List<Repo> repos) {
         mRepos = repos;
         notifyItemInserted(mRepos.size() - 1);
     }

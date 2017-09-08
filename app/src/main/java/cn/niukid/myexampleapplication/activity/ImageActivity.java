@@ -1,13 +1,14 @@
 package cn.niukid.myexampleapplication.activity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.orhanobut.logger.Logger;
 
 import butterknife.BindView;
+import cn.niukid.activity.BaseActivity;
 import cn.niukid.application.GlideApp;
 import cn.niukid.myexampleapplication.R;
 import cn.niukid.myexampleapplication.RoutePathConfig;
@@ -17,7 +18,7 @@ import cn.niukid.myexampleapplication.RoutePathConfig;
  */
 
 @Route(path = RoutePathConfig.AROUTER_PATH_LOADIMAGE, group = RoutePathConfig.AROUTER_GROUP_APP)
-public class ImageActivity  extends BaseActivity{
+public class ImageActivity  extends BaseActivity {
 
     @BindView(R.id.imageView) ImageView imageView;
 
@@ -36,7 +37,7 @@ public class ImageActivity  extends BaseActivity{
         //component().inject(this);
         //ARouter.getInstance().inject(this);//父类中已调用
 
-        Log.d("ImageActivity","url="+url);
+        Logger.i("url="+url);
 
 
         //Glide requires a minimum API level of 10.

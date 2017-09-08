@@ -1,25 +1,26 @@
-package cn.niukid.http;
+package cn.niukid.httpclient;
 
 /**
  * Created by bill on 8/21/17.
  */
 
 import android.net.ParseException;
-import android.util.Log;
 
 import com.google.gson.JsonParseException;
-
+import com.orhanobut.logger.Logger;
 
 import org.apache.http.conn.ConnectTimeoutException;
 import org.json.JSONException;
 
 import java.net.ConnectException;
 
+import cn.niukid.application.AppApplication;
+import cn.niukid.utils.NetworkUtil;
 import retrofit2.HttpException;
 
 
 public class ExceptionHandle {
-    private final static String TAG="ExceptionHandle";
+    //private final static String TAG="MyApp/ExceptionHandle";
     private static final int UNAUTHORIZED = 401;
     private static final int FORBIDDEN = 403;
     private static final int NOT_FOUND = 404;
@@ -59,6 +60,11 @@ public class ExceptionHandle {
          * 连接超时
          */
         public static final int TIMEOUT_ERROR = 1006;
+
+        /**
+         *
+         */
+        public static final int NETWORK_UNAVAILABLE_ERROR = 1007;
     }
 
     public static class ResponeThrowable extends Exception {
@@ -76,17 +82,32 @@ public class ExceptionHandle {
         ResponeThrowable ex;
         if (e instanceof HttpException) {
             HttpException httpException = (HttpException) e;
-            //ex = new ResponeThrowable(e, ERROR.HTTP_ERROR);
             ex = new ResponeThrowable(e, httpException.code());
             switch (httpException.code()) {
                 case UNAUTHORIZED:
+                    ex.message = "未授权访问";
+                    break;
                 case FORBIDDEN:
+                    ex.message = "禁止访问";
+                    break;
                 case NOT_FOUND:
+                    ex.message = "未找到";
+                    break;
                 case REQUEST_TIMEOUT:
+                    ex.message = "请求超时";
+                    break;
                 case GATEWAY_TIMEOUT:
+                    ex.message = "网关超时";
+                    break;
                 case INTERNAL_SERVER_ERROR:
+                    ex.message = "内部错误";
+                    break;
                 case BAD_GATEWAY:
+                    ex.message = "网关错误";
+                    break;
                 case SERVICE_UNAVAILABLE:
+                    ex.message = "服务不可用";
+                    break;
                 default:
                     ex.message = "网络错误";
                     break;
@@ -105,7 +126,7 @@ public class ExceptionHandle {
             return ex;
         } else if (e instanceof ConnectException) {
             ex = new ResponeThrowable(e, ERROR.NETWORD_ERROR);
-            ex.message = "连接失败";
+            ex.message = "连接失败，请检查网络";
             return ex;
         } else if (e instanceof javax.net.ssl.SSLHandshakeException) {
             ex = new ResponeThrowable(e, ERROR.SSL_ERROR);
@@ -113,17 +134,25 @@ public class ExceptionHandle {
             return ex;
         } else if (e instanceof ConnectTimeoutException){
             ex = new ResponeThrowable(e, ERROR.TIMEOUT_ERROR);
-            ex.message = "连接超时";
+            ex.message = "连接超时，请检查网络";
             return ex;
         } else if (e instanceof java.net.SocketTimeoutException) {
             ex = new ResponeThrowable(e, ERROR.TIMEOUT_ERROR);
-            ex.message = "连接超时";
+            ex.message = "套接字超时，请检查网络";
             return ex;
         }
         else {
-            ex = new ResponeThrowable(e, ERROR.UNKNOWN);
-            ex.message = "未知错误";
-            Log.e(TAG,e.getMessage());
+            if (NetworkUtil.isNetworkAvailable(AppApplication.get()))
+            {
+                ex = new ResponeThrowable(e, ERROR.UNKNOWN);
+                ex.message = "未知错误,如是否有权限访问网络";
+            }else
+            {
+                ex = new ResponeThrowable(e, ERROR.NETWORK_UNAVAILABLE_ERROR);
+                ex.message = "网络不可用，请检查";
+            }
+
+            Logger.e("unknown exception: "+e.getMessage());
             return ex;
         }
     }

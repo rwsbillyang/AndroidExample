@@ -1,4 +1,4 @@
-package cn.niukid.http;
+package cn.niukid.utils;
 
 /**
  * Created by bill on 8/21/17.
@@ -70,12 +70,12 @@ public class NetworkUtil {
     /**
      * 返回当前网络状态
      *
-     * @param context
+     * @param application
      * @return
      */
-    public static int getNetState(Context context) {
+    public static int getNetState(Application application) {
         try {
-            ConnectivityManager connectivity = (ConnectivityManager) context
+            ConnectivityManager connectivity = (ConnectivityManager) application
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
             if (connectivity != null) {
                 NetworkInfo networkinfo = connectivity.getActiveNetworkInfo();
@@ -121,11 +121,11 @@ public class NetworkUtil {
 
     /**
      * check is3G
-     * @param context
+     * @param application
      * @return boolean
      */
-    public static boolean is3G(Context context) {
-        ConnectivityManager connectivityManager = (ConnectivityManager) context
+    public static boolean is3G(Application application) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) application
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
         if (activeNetInfo != null
@@ -137,11 +137,11 @@ public class NetworkUtil {
 
     /**
      * isWifi
-     * @param context
+     * @param application
      * @return boolean
      */
-    public static boolean isWifi(Context context) {
-        ConnectivityManager connectivityManager = (ConnectivityManager) context
+    public static boolean isWifi(Application application) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) application
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
         if (activeNetInfo != null
@@ -153,11 +153,11 @@ public class NetworkUtil {
 
     /**
      * is2G
-     * @param context
+     * @param application
      * @return boolean
      */
-    public static boolean is2G(Context context) {
-        ConnectivityManager connectivityManager = (ConnectivityManager) context
+    public static boolean is2G(Application application) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) application
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
         if (activeNetInfo != null
@@ -172,10 +172,10 @@ public class NetworkUtil {
     /**
      *  is wifi on
      */
-    public static boolean isWifiEnabled(Context context) {
-        ConnectivityManager mgrConn = (ConnectivityManager) context
+    public static boolean isWifiEnabled(Application application) {
+        ConnectivityManager mgrConn = (ConnectivityManager) application
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
-        TelephonyManager mgrTel = (TelephonyManager) context
+        TelephonyManager mgrTel = (TelephonyManager) application
                 .getSystemService(Context.TELEPHONY_SERVICE);
         return ((mgrConn.getActiveNetworkInfo() != null && mgrConn
                 .getActiveNetworkInfo().getState() == NetworkInfo.State.CONNECTED) || mgrTel

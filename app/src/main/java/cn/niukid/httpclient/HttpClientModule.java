@@ -1,8 +1,10 @@
-package cn.niukid.http;
+package cn.niukid.httpclient;
 
 
 import android.app.Application;
 import android.util.Log;
+
+import com.orhanobut.logger.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,14 +39,16 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
+
 /**
  * Created by bill on 8/21/17.
  */
 
 
 @Module
-public class HttpApiModule {
-    private final static String TAG="HttpApiModule";
+public class HttpClientModule {
+
     private Cache cache = null;
     private File httpCacheDirectory = null;
 
@@ -54,10 +58,10 @@ public class HttpApiModule {
     @Singleton
     @Provides
     public OkHttpClient provideOkHttpClient(Application application) {
-        Log.d(TAG,"provideOkHttpClient...");
+        Logger.d("provideOkHttpClient...");
         //缓存地址
         if (httpCacheDirectory == null) {
-            httpCacheDirectory = new File(application.getCacheDir(), GlobalConfig.CACHE_PATH);
+            httpCacheDirectory = new File(application.getCacheDir(), GlobalConfig.HTTP_CACHE_PATH);
         }
 
         try {
@@ -65,7 +69,7 @@ public class HttpApiModule {
                 cache = new Cache(httpCacheDirectory, GlobalConfig.CACHE_SIZE);
             }
         } catch (Exception e) {
-            Log.e("HttpApiModule", "Could not create http cache");
+            Logger.e( "Could not create http cache");
         }
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
@@ -135,7 +139,7 @@ public class HttpApiModule {
 
     /** Dangerous interceptor that rewrites the server's cache-control header. */
     private static final Interceptor REWRITE_CACHE_CONTROL_INTERCEPTOR = new Interceptor() {
-        @Override public Response intercept(Interceptor.Chain chain) throws IOException {
+        @Override public Response intercept(Chain chain) throws IOException {
             Response originalResponse = chain.proceed(chain.request());
             return originalResponse.newBuilder()
                     .header("Cache-Control", "max-age=60")

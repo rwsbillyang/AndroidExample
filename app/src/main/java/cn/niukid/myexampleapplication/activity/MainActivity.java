@@ -4,23 +4,25 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.orhanobut.logger.Logger;
 
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.niukid.activity.BaseActivity;
 import cn.niukid.myexampleapplication.R;
 import cn.niukid.myexampleapplication.RoutePathConfig;
 
 //Alt+Enter
 @Route(path = RoutePathConfig.AROUTER_PATH_HOMEMAIN, group = RoutePathConfig.AROUTER_GROUP_APP)
 public class MainActivity extends BaseActivity {
+
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.fab) FloatingActionButton fab;
     /*
@@ -42,8 +44,9 @@ public class MainActivity extends BaseActivity {
             case R.id.button:
                 //Intent intent = new Intent();
                 //intent.setClass(MainActivity.this, ReposListActivity.class);
-                //intent.setClassName(MainActivity.this,"cn.niukid.myexampleapplication.activity.ReposListActivity");
+                //intent.setClassName(MainActivity.this,"cn.niukid.myexampleapplication.Repo.ReposListActivity");
                 //startActivity(intent);
+
                 ARouter.getInstance().build(RoutePathConfig.AROUTER_PATH_REPOLIST, RoutePathConfig.AROUTER_GROUP_APP)
                         //.withLong("key1", 666L)
                         .withString("user", "tom")  //需在目标Activity中调用ARouter.getInstance().inject(this);才可实现注入
@@ -67,7 +70,7 @@ public class MainActivity extends BaseActivity {
                     .setAction("Action", null).show();
                 break;
             default:
-                Log.w("mainActivity","unknown id: "+view.getId());
+                Logger.w("unknown id: "+view.getId());
         }
 
 

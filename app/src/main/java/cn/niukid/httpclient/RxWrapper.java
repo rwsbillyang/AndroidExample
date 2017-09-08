@@ -1,9 +1,4 @@
-package cn.niukid.http;
-
-import android.app.ProgressDialog;
-import android.content.Context;
-
-import java.lang.ref.WeakReference;
+package cn.niukid.httpclient;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
@@ -17,39 +12,32 @@ import io.reactivex.schedulers.Schedulers;
  * Created by bill on 8/21/17.
  */
 
-public class HttpManager {
+public class RxWrapper {
 
-    private WeakReference<Context> context;
     private Observable observable;
     private HttpResultObserver subscriber;
-    private boolean showProgress = true;
 
-    private volatile static HttpManager singleton;
-    private HttpManager() { }
-    public static HttpManager get()
+    private volatile static RxWrapper singleton;
+    private RxWrapper() { }
+    public static RxWrapper get()
     {
         if (singleton == null)
         {
-            synchronized (HttpManager.class)
+            synchronized (RxWrapper.class)
             {
                 if (singleton == null)
                 {
-                    singleton = new HttpManager();
+                    singleton = new RxWrapper();
                 }
             }
         }
         return singleton;
     }
 
-    public HttpManager with(Context context)
-    {
-        this.context = new WeakReference<>(context);
-        return singleton;
-    }
     /**
      * 默认结果变换函数，默认结果为 ResultModel<T> 类型，变换成T类型
      * */
-    public HttpManager setObservable(Observable observable)
+    public RxWrapper setObservable(Observable observable)
     {
         this.observable = observable.compose(schedulersTransformer)
                 .map(new ResultMapper()).onErrorResumeNext(new ThrowableToObserverSource());
@@ -59,7 +47,7 @@ public class HttpManager {
     /**
      * 不需结果变换函数，请求返回的结果直接是所需的数据
      * */
-    public HttpManager setObservableWithoutResultMapper(Observable observable)
+    public RxWrapper setObservableWithoutResultMapper(Observable observable)
     {
         this.observable = observable.compose(schedulersTransformer)
                 .onErrorResumeNext(new ThrowableToObserverSource());
@@ -69,7 +57,7 @@ public class HttpManager {
     /**
      * 自定义结果变换函数。当返回结果数据格式不一，ResultModel<T> 不满足时，需自定义转换函数
      * */
-    public HttpManager setObservableWihtCustomResultMapper(Observable observable, Function trFunction)
+    public RxWrapper setObservableWihtCustomResultMapper(Observable observable, Function trFunction)
     {
         this.observable = observable.compose(schedulersTransformer)
                 .map(trFunction).onErrorResumeNext(new ThrowableToObserverSource());
@@ -103,39 +91,16 @@ public class HttpManager {
         }
     }
 
-    /**
-     * 是否显示ProgressDialog
-     * */
-    public HttpManager showProgress(boolean showProgress)
-    {
-        this.showProgress = showProgress;
-        return singleton;
-    }
 
     /**
      * 为subscriber指定数据处理Listener
      * */
-    public void setResultHandler(IResultDataHandler resultHandler)
+    public void subscribe(IResultCallback resultHandler)
     {
-        subscriber = new HttpResultObserver(resultHandler, context.get());
+        subscriber = new HttpResultObserver(resultHandler);
         observable.subscribe(subscriber);
     }
 
-    /**
-     * 为subscriber指定数据处理Listener 自定义ProgressDialog的文字
-     * */
-    public void setResultHandler(IResultDataHandler resultHandler, String message)
-    {
-        observable.subscribe(new HttpResultObserver(resultHandler, context.get(), message));
-    }
-
-    /**
-     * 为subscriber指定数据处理Listener 自定义ProgressDialog
-     * */
-    public void setResultHandler(IResultDataHandler resultHandler, ProgressDialog dialog)
-    {
-        observable.subscribe(new HttpResultObserver(resultHandler, context.get(), dialog));
-    }
 
     /**
      * 取消请求

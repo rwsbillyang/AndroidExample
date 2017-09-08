@@ -1,4 +1,4 @@
-package cn.niukid.myexampleapplication.bean;
+package cn.niukid.myexampleapplication.repo;
 
 /**
  * Created by bill on 8/21/17.

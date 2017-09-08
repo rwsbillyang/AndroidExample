@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">MyExampleApplication</string>
+    <string name="action_settings">设置</string>
+
+    <string name="main_mock_data">test snackbar...</string>
+    <string name="load_data">retrofit/okhttp</string>
+    <string name="load_data_title">test rxjava2+retrofit+okhttp</string>
+    <string name="load_image">glide</string>
+    <string name="load_image_title">测试Glide加载图片</string>
+    <string name="greendao">greenDAO</string>
+    <string name="greendao_title">greenDAO记事本示例</string>
+
+    <string name="enter_new_note">输入记事本</string>
+    <string name="add">添加</string>
+    <string name="click_to_remove">点一下删除</string>
+
+    <string name="loading">加载中...</string>
+</resources>

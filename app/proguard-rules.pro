@@ -24,6 +24,15 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+#fix proguard error when run
+-keep class com.google.**
+#-dontwarn com.google.**
+-keep  class com.alibaba.android.arouter.facade.model.**
+#-dontwarn com.alibaba.android.arouter.facade.model.**
+-keep public class com.google.common.**
+-keep public class * extends android.app.Activity
+
+
 #ARouter
 -keep public class com.alibaba.android.arouter.routes.**{*;}
 -keep class * implements com.alibaba.android.arouter.facade.template.ISyringe{*;}
@@ -66,8 +75,11 @@
   **[] $VALUES;
   public *;
 }
--keepresourcexmlelements manifest/application/meta-data@value=GlideModule # for DexGuard only
--keep class com.bumptech.glide.integration.okhttp3.OkHttpGlideModule  #for OKHttp
+# for DexGuard only
+#-keepresourcexmlelements manifest/application/meta-data@value=GlideModule
+
+#for OKHttp
+-keep class com.bumptech.glide.integration.okhttp3.OkHttpGlideModule
 #Glide: download image,alternate: fresco
 
 #GreenDao

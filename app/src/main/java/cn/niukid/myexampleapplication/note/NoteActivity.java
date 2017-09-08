@@ -9,7 +9,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -18,6 +17,7 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.orhanobut.logger.Logger;
 
 import org.greenrobot.greendao.query.Query;
 
@@ -25,9 +25,9 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 
+import cn.niukid.activity.BaseActivity;
 import cn.niukid.application.AppApplication;
 import cn.niukid.myexampleapplication.R;
-import cn.niukid.myexampleapplication.activity.BaseActivity;
 import cn.niukid.myexampleapplication.RoutePathConfig;
 
 @Route(path = RoutePathConfig.AROUTER_PATH_GREENDAO_NOTE, group = RoutePathConfig.AROUTER_GROUP_APP)
@@ -126,7 +126,7 @@ public class NoteActivity extends BaseActivity {
         note.setDate(new Date());
         note.setType(NoteType.TEXT);
         noteDao.insert(note);
-        Log.d("DaoExample", "Inserted new note, ID: " + note.getId());
+        Logger.d("Inserted new note, ID: " + note.getId());
 
         showAllNotes();
     }
@@ -138,7 +138,7 @@ public class NoteActivity extends BaseActivity {
             Long noteId = note.getId();
 
             noteDao.deleteByKey(noteId);
-            Log.d("DaoExample", "Deleted note, ID: " + noteId);
+            Logger.d( "Deleted note, ID: " + noteId);
 
             showAllNotes();
         }

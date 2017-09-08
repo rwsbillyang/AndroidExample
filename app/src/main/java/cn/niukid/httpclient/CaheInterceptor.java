@@ -1,21 +1,25 @@
-package cn.niukid.http;
+package cn.niukid.httpclient;
 
 /**
  * Created by bill on 8/21/17.
  */
 
 import android.app.Application;
-import android.util.Log;
+
+import com.orhanobut.logger.Logger;
 
 import java.io.IOException;
 
+import cn.niukid.GlobalConfig;
+import cn.niukid.utils.NetworkUtil;
 import okhttp3.CacheControl;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class CaheInterceptor implements Interceptor {
 
+public class CaheInterceptor implements Interceptor {
+    //private final static String TAG="MyApp/CaheInterceptor";
     private Application application;
 
 
@@ -30,16 +34,16 @@ public class CaheInterceptor implements Interceptor {
         if (NetworkUtil.isNetworkAvailable(application)) {
             Response response = chain.proceed(request);
             // read from cache for 60 s
-            int maxAge = 60;
+
             String cacheControl = request.cacheControl().toString();
-            Log.e("CacheInterceptor", "60s load cahe" + cacheControl);
+            Logger.i( "60s load cache" + cacheControl);
             return response.newBuilder()
                     .removeHeader("Pragma")
                     .removeHeader("Cache-Control")
-                    .header("Cache-Control", "public, max-age=" + maxAge)
+                    .header("Cache-Control", "public, max-age=" + GlobalConfig.HTTP_CACHE_TIME)
                     .build();
         } else {
-            Log.e("CacheInterceptor", " no network load cahe");
+            Logger.w(" no network, load from http cache");
             request = request.newBuilder()
                     .cacheControl(CacheControl.FORCE_CACHE)
                     .build();

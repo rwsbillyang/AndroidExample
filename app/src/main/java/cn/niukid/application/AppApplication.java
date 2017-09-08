@@ -1,14 +1,20 @@
 package cn.niukid.application;
 
 import android.app.Application;
-import android.util.Log;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.orhanobut.logger.AndroidLogAdapter;
+import com.orhanobut.logger.CsvFormatStrategy;
+import com.orhanobut.logger.DiskLogAdapter;
+import com.orhanobut.logger.FormatStrategy;
+import com.orhanobut.logger.Logger;
+import com.orhanobut.logger.PrettyFormatStrategy;
 
 import org.greenrobot.greendao.database.Database;
 
 import cn.niukid.GlobalConfig;
-import cn.niukid.http.HttpApiModule;
+import cn.niukid.httpclient.HttpClientModule;
+import cn.niukid.myexampleapplication.BuildConfig;
 import cn.niukid.myexampleapplication.HttpBizModule;
 import cn.niukid.myexampleapplication.note.DaoMaster;
 import cn.niukid.myexampleapplication.note.DaoSession;
@@ -31,7 +37,7 @@ import cn.niukid.myexampleapplication.note.DaoSession;
  */
 
 public class AppApplication extends Application {
-    private final static String TAG="AppApplication";
+    //private final static String TAG="MyApp/AppApplication";
 
     private  AppComponent appComponent;
 
@@ -47,10 +53,10 @@ public class AppApplication extends Application {
     @Override
     public void onCreate(){
         super.onCreate();
-
         instance = this;
 
-        Log.i(TAG,"create AppApplication....");
+        setupLog();
+        Logger.i("create AppApplication....");
 
         setupArouter();
         setupComponent();
@@ -82,6 +88,7 @@ public class AppApplication extends Application {
         ARouter.init(this); // 尽可能早，推荐在Application中初始化
     }
 
+
     /**
     * Dagger2 CheckList：
     * 1.此处创建component，以及各Module，并指定给component
@@ -99,11 +106,11 @@ public class AppApplication extends Application {
         if(appComponent==null)
             appComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
-                .httpApiModule(new HttpApiModule())
+                .httpClientModule(new HttpClientModule())
                 .httpBizModule(new HttpBizModule())
                 .build();
         else
-            Log.w(TAG,"setupComponent again");
+            Logger.w("setupComponent again");
     }
 
     /** A flag to show how easily you can switch from standard SQLite to the encrypted SQLCipher. */
@@ -123,6 +130,34 @@ public class AppApplication extends Application {
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, ENCRYPTED ? "notes-db-encrypted" : "notes-db");
         Database db = ENCRYPTED ? helper.getEncryptedWritableDb("super-secret") : helper.getWritableDb();
         daoSession = new DaoMaster(db).newSession();
+    }
+
+
+    protected void setupLog()
+    {
+        FormatStrategy formatStrategy = PrettyFormatStrategy.newBuilder()
+                .showThreadInfo(false)  // (Optional) Whether to show thread info or not. Default true
+                .methodCount(1)         // (Optional) How many method line to show. Default 2
+                //.methodOffset(7)        // (Optional) Hides internal method calls up to offset. Default 5
+                //.logStrategy(customLog) // (Optional) Changes the log strategy to print out. Default LogCat
+                .tag("MyApp")   // (Optional) Global tag for every log. Default PRETTY_LOGGER
+                .build();
+
+        Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy) {
+            @Override public boolean isLoggable(int priority, String tag) {
+                return BuildConfig.DEBUG;
+            }
+        });
+
+        FormatStrategy csvFormatStrategy = CsvFormatStrategy.newBuilder()
+                .tag("MyApp")
+                .build();
+        Logger.addLogAdapter(new DiskLogAdapter(csvFormatStrategy){
+            @Override public boolean isLoggable(int priority, String tag) {
+                return priority>=Logger.WARN;
+            }
+        });
+
     }
 
 }

@@ -3,9 +3,9 @@ package cn.niukid.application;
 
 import javax.inject.Singleton;
 
-import cn.niukid.http.HttpApiModule;
+import cn.niukid.httpclient.HttpClientModule;
 import cn.niukid.myexampleapplication.HttpBizModule;
-import cn.niukid.myexampleapplication.activity.ReposListActivity;
+import cn.niukid.myexampleapplication.repo.RepoViewModel;
 import dagger.Component;
 
 /**
@@ -16,10 +16,10 @@ import dagger.Component;
  * 通过@Inject注解直接使用，AppComponent中的inject方法的参数则表明了要注入的位置
  */
 @Singleton
-@Component(modules = { AppModule.class,HttpApiModule.class, HttpBizModule.class})
+@Component(modules = { AppModule.class,HttpClientModule.class, HttpBizModule.class})
 public interface AppComponent {
     /**
      * 参数表示要注入的位置
      * */
-    void inject(ReposListActivity activity);
+    void inject(RepoViewModel model);
 }
