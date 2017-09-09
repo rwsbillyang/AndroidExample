@@ -29,7 +29,7 @@ import cn.niukid.myexampleapplication.RoutePathConfig;
 public class ReposListActivity extends ShowProgressActivity {
 
     @BindView(R.id.repos_rv_list)
-    RecyclerView mRvList;
+    RecyclerView recyclerView;
 
 
     //需在目标Activity中调用ARouter.getInstance().inject(this);才可实现注入
@@ -51,10 +51,10 @@ public class ReposListActivity extends ShowProgressActivity {
 
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRvList.setLayoutManager(manager);
+        recyclerView.setLayoutManager(manager);
 
-        final ListAdapter  adapter = new ListAdapter();
-        mRvList.setAdapter(adapter);
+        final RepoListAdapter  adapter = new RepoListAdapter();
+        recyclerView.setAdapter(adapter);
 
 
         RepoViewModel viewModel = ViewModelProviders.of(this).get(RepoViewModel.class);
@@ -66,7 +66,7 @@ public class ReposListActivity extends ShowProgressActivity {
                 {
                     Toast.makeText(ReposListActivity.this,"没有数据了",Toast.LENGTH_LONG).show();
                 }else
-                    adapter.setRepos(repos);
+                    adapter.setList(repos);
             }
         } );
     }
