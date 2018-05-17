@@ -1,9 +1,9 @@
-package cn.niukid.application;
+package cn.niukid.common.application;
 
 
 import javax.inject.Singleton;
 
-import cn.niukid.httpclient.HttpClientModule;
+import cn.niukid.common.httpclient.HttpClientModule;
 import cn.niukid.myexampleapplication.HttpBizModule;
 import cn.niukid.myexampleapplication.repo.RepoViewModel;
 import dagger.Component;

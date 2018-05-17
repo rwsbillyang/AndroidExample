@@ -1,8 +1,10 @@
-package cn.niukid.httpclient;
+package cn.niukid.common.httpclient;
 
 /**
  * Created by bill on 8/21/17.
  */
+
+import com.orhanobut.logger.Logger;
 
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
@@ -23,7 +25,9 @@ public  class ResultMapper<T> implements Function<ResultModel<T>,T>
         }
         else
         {
-            throw new RuntimeException("请求失败(code=" + resultModel.status + ",message=" + resultModel.message+ ")");
+            String msg="请求失败(code=" + resultModel.status + ",message=" + resultModel.message+ ")";
+            Logger.w(msg);
+            throw new RuntimeException(msg);
         }
     }
 }

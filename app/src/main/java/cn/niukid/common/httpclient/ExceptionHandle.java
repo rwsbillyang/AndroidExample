@@ -1,4 +1,4 @@
-package cn.niukid.httpclient;
+package cn.niukid.common.httpclient;
 
 /**
  * Created by bill on 8/21/17.
@@ -13,9 +13,11 @@ import org.apache.http.conn.ConnectTimeoutException;
 import org.json.JSONException;
 
 import java.net.ConnectException;
+import java.util.List;
 
-import cn.niukid.application.AppApplication;
-import cn.niukid.utils.NetworkUtil;
+import cn.niukid.common.application.AppApplication;
+import cn.niukid.common.utils.NetworkUtil;
+import io.reactivex.exceptions.CompositeException;
 import retrofit2.HttpException;
 
 
@@ -140,19 +142,30 @@ public class ExceptionHandle {
             ex = new ResponeThrowable(e, ERROR.TIMEOUT_ERROR);
             ex.message = "套接字超时，请检查网络";
             return ex;
-        }
-        else {
+        }else if(e instanceof io.reactivex.exceptions.CompositeException)
+        {
+            List<Throwable> list=  ((CompositeException) e).getExceptions();
+            for(Throwable t:list)
+            {
+                Logger.w("message:"+t.getMessage());
+                //t.printStackTrace();
+            }
+            ex = new ResponeThrowable(e, ERROR.UNKNOWN);
+            ex.message = "请求失败";
+            return ex;
+        }else{
             if (NetworkUtil.isNetworkAvailable(AppApplication.get()))
             {
                 ex = new ResponeThrowable(e, ERROR.UNKNOWN);
-                ex.message = "未知错误,如是否有权限访问网络";
+                ex.message = "未知错误:"+ e.getClass().getName();
             }else
             {
                 ex = new ResponeThrowable(e, ERROR.NETWORK_UNAVAILABLE_ERROR);
                 ex.message = "网络不可用，请检查";
             }
 
-            Logger.e("unknown exception: "+e.getMessage());
+            Logger.e("unknown exception: "+e.getClass().getName()+","+ e.getMessage());
+            //e.printStackTrace();
             return ex;
         }
     }

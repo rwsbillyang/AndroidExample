@@ -4,7 +4,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import butterknife.BindView;
-import cn.niukid.activity.BaseListAdapter;
+import cn.niukid.common.activity.BaseListAdapter;
 import cn.niukid.myexampleapplication.R;
 
 /**

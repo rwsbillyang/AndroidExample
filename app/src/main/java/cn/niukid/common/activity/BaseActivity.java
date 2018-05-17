@@ -1,15 +1,15 @@
-package cn.niukid.activity;
+package cn.niukid.common.activity;
 
+import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LifecycleRegistry;
-import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 
 import butterknife.ButterKnife;
-import cn.niukid.application.AppApplication;
-import cn.niukid.application.AppComponent;
+import cn.niukid.common.application.AppApplication;
+import cn.niukid.common.application.AppComponent;
 
 /**
  * 1.ButterKnife绑定，子类不再需绑定，直接使用ButterKnife；
@@ -19,7 +19,7 @@ import cn.niukid.application.AppComponent;
  *
  * Created by bill on 8/21/17.
  * */
-public abstract class BaseActivity extends AppCompatActivity implements LifecycleRegistryOwner {
+public abstract class BaseActivity extends AppCompatActivity implements LifecycleOwner {
 
     LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
 

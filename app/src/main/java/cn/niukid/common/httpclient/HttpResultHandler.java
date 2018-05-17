@@ -1,10 +1,10 @@
-package cn.niukid.httpclient;
+package cn.niukid.common.httpclient;
 
 import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 
-import cn.niukid.activity.MessageEvent;
+import cn.niukid.common.activity.MessageEvent;
 import io.reactivex.observers.DefaultObserver;
 
 
@@ -20,41 +20,46 @@ import io.reactivex.observers.DefaultObserver;
  *  Created by bill on 8/21/17.
  */
 
-public  class HttpResultObserver<T> extends DefaultObserver<T> {
+public  class HttpResultHandler<T> extends DefaultObserver<T> {
 
     private IResultCallback callback;
 
-    public HttpResultObserver(IResultCallback callback) {
+    public HttpResultHandler(IResultCallback callback) {
         this.callback = callback;
     }
 
+
     /**
-     * 取消请求
+     * 开始时只显示动态条
      * */
-    public void cancelRequest()
-    {
-        cancel();
-    }
-
-    private void showProgressDialog()
-    {
-        Logger.v("post event LOADING_START");
-        EventBus.getDefault().post(new MessageEvent(MessageEvent.LOADING_START));
-    }
-    private void dismissProgressDialog()
-    {
-        Logger.v("post event LOADING_FINISH");
-        EventBus.getDefault().post(new MessageEvent(MessageEvent.LOADING_FINISH));
-    }
-
     @Override public void onStart()
     {
         showProgressDialog();
     }
 
+    /**
+     * 结束请求后关闭动态条
+     * */
     @Override public void onComplete()
     {
         dismissProgressDialog();
+    }
+
+
+
+    /**
+     * 调用callback进行结果处理
+     * */
+    @Override public void onNext(T t)
+    {
+        if (callback != null)
+        {
+            Logger.i("to handle the response result...");
+            callback.handleResult(t);
+        }else
+        {
+            Logger.w("no callback to handle result");
+        }
     }
 
 
@@ -72,21 +77,35 @@ public  class HttpResultObserver<T> extends DefaultObserver<T> {
             handleError(new ExceptionHandle.ResponeThrowable(e, ExceptionHandle.ERROR.UNKNOWN));
         }
     }
+
     /**
-     * 调用callback进行结果处理
+     * 取消请求
      * */
-    @Override public void onNext(T t)
+    public void cancelRequest()
     {
-        if (callback != null)
-        {
-            callback.handleResult(t);
-        }
+        cancel();
     }
+
+
     /**
      * 出错时的处理
      * */
     private void handleError(ExceptionHandle.ResponeThrowable e){
+        Logger.w("handleError");
         EventBus.getDefault().post(new MessageEvent(e.code,e.message));
     }
+
+
+    private void showProgressDialog()
+    {
+        Logger.v("post event LOADING_START");
+        EventBus.getDefault().post(new MessageEvent(MessageEvent.LOADING_START));
+    }
+    private void dismissProgressDialog()
+    {
+        Logger.v("post event LOADING_FINISH");
+        EventBus.getDefault().post(new MessageEvent(MessageEvent.LOADING_FINISH));
+    }
+
 
 }

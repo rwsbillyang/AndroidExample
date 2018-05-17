@@ -8,8 +8,8 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.orhanobut.logger.Logger;
 
 import butterknife.BindView;
-import cn.niukid.activity.BaseActivity;
-import cn.niukid.application.GlideApp;
+import cn.niukid.common.activity.BaseActivity;
+import cn.niukid.common.application.GlideApp;
 import cn.niukid.myexampleapplication.R;
 import cn.niukid.myexampleapplication.RoutePathConfig;
 

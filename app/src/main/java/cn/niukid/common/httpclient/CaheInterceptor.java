@@ -1,4 +1,4 @@
-package cn.niukid.httpclient;
+package cn.niukid.common.httpclient;
 
 /**
  * Created by bill on 8/21/17.
@@ -10,8 +10,8 @@ import com.orhanobut.logger.Logger;
 
 import java.io.IOException;
 
-import cn.niukid.GlobalConfig;
-import cn.niukid.utils.NetworkUtil;
+import cn.niukid.myexampleapplication.GlobalConfig;
+import cn.niukid.common.utils.NetworkUtil;
 import okhttp3.CacheControl;
 import okhttp3.Interceptor;
 import okhttp3.Request;

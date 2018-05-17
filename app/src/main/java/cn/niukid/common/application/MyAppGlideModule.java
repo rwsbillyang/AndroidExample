@@ -1,4 +1,4 @@
-package cn.niukid.application;
+package cn.niukid.common.application;
 
 /**
  * Created by bill on 8/22/17.

@@ -1,4 +1,4 @@
-package cn.niukid.httpclient;
+package cn.niukid.common.httpclient;
 
 import java.util.Map;
 

@@ -12,10 +12,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import cn.niukid.GlobalConfig;
-import cn.niukid.application.AppApplication;
-import cn.niukid.httpclient.IResultCallback;
-import cn.niukid.httpclient.RxWrapper;
+import cn.niukid.myexampleapplication.GlobalConfig;
+import cn.niukid.common.application.AppApplication;
+import cn.niukid.common.httpclient.IResultCallback;
+import cn.niukid.common.httpclient.RxWrapper;
 import io.rx_cache2.DynamicKey;
 import io.rx_cache2.EvictDynamicKey;
 import io.rx_cache2.internal.RxCache;
@@ -56,8 +56,7 @@ public class RepoViewModel extends ViewModel {
             //https://api.github.com/users/tom/repos
             //以userName为DynamicKey,如果update为true,将会重新获取数据并清理缓存。
             RxWrapper
-                    .get()
-                    .setObservableWithoutResultMapper(
+                    .get().setObservable(
                             cacheProviders.getRepos(
                                     httpRepoService.getRepos(userName),
                                     new DynamicKey(userName),

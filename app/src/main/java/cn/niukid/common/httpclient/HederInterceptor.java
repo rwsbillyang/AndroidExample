@@ -1,4 +1,4 @@
-package cn.niukid.httpclient;
+package cn.niukid.common.httpclient;
 
 /**
  * Created by bill on 8/21/17.

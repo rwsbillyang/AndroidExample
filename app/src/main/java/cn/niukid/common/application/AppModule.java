@@ -1,4 +1,4 @@
-package cn.niukid.application;
+package cn.niukid.common.application;
 
 import android.app.Application;
 

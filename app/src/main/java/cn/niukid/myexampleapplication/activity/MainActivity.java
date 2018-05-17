@@ -15,7 +15,7 @@ import com.orhanobut.logger.Logger;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.OnClick;
-import cn.niukid.activity.BaseActivity;
+import cn.niukid.common.activity.BaseActivity;
 import cn.niukid.myexampleapplication.R;
 import cn.niukid.myexampleapplication.RoutePathConfig;
 

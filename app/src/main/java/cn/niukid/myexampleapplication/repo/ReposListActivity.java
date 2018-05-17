@@ -15,7 +15,7 @@ import com.orhanobut.logger.Logger;
 import java.util.List;
 
 import butterknife.BindView;
-import cn.niukid.activity.ShowProgressActivity;
+import cn.niukid.common.activity.ShowProgressActivity;
 import cn.niukid.myexampleapplication.R;
 import cn.niukid.myexampleapplication.RoutePathConfig;
 
@@ -64,6 +64,7 @@ public class ReposListActivity extends ShowProgressActivity {
             public void onChanged(@Nullable List<Repo> repos) {
                 if(repos==null||repos.size()==0)
                 {
+                    Logger.d("no data when getRepoList");
                     Toast.makeText(ReposListActivity.this,"没有数据了",Toast.LENGTH_LONG).show();
                 }else
                     adapter.setList(repos);

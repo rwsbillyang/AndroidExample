@@ -1,4 +1,4 @@
-package cn.niukid.activity;
+package cn.niukid.common.activity;
 
 /**
  * Created by bill on 9/7/17.

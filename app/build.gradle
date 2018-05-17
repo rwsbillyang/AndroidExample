@@ -11,7 +11,6 @@ apply plugin: 'org.greenrobot.greendao' // apply plugin
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
         applicationId "cn.niukid.myexampleapplication"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -46,19 +45,19 @@ android {
     }
 
     // If you need to add more flavors, consider using flavor dimensions.
-    productFlavors {
-        prod {
-
-        }
-    }
+//    productFlavors {
+//        prod {
+//
+//        }
+//    }
 
     // Remove mockRelease as it's not needed.
-    android.variantFilter { variant ->
-        if (variant.buildType.name == 'release'
-                && variant.getFlavors().get(0).name == 'mock') {
-            variant.setIgnore(true);
-        }
-    }
+//    android.variantFilter { variant ->
+//        if (variant.buildType.name == 'release'
+//                && variant.getFlavors().get(0).name == 'mock') {
+//            variant.setIgnore(true);
+//        }
+//    }
 
     // Always show the result of every unit test, even if it passes.
     testOptions.unitTests.all {
@@ -67,10 +66,11 @@ android {
         }
     }
 
-    dataBinding {
-        enabled = true
-    }
+//    dataBinding {
+//        enabled = true
+//    }
 
+    buildToolsVersion '27.0.3'
 }
 
 
@@ -82,104 +82,126 @@ greendao {
 
 dependencies {
 
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile("com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion", {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.google.code.findbugs'
 //Conflict between dagger2(findbugs:jsr305:3.0.1) and espresso-core:2.2.2(findbugs:jsr305:2.0.1)
     })
 
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 
     // App's dependencies
-    compile "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
-    compile "com.android.support:cardview-v7:$rootProject.ext.supportLibraryVersion"
-    compile "com.android.support:design:$rootProject.ext.supportLibraryVersion"
-    compile "com.android.support:recyclerview-v7:$rootProject.ext.supportLibraryVersion"
-    compile "com.android.support:support-v4:$rootProject.ext.supportLibraryVersion"
-    compile "com.google.guava:guava:$rootProject.ext.guavaVersion"
-    testCompile "junit:junit:$rootProject.ext.junitVersion"
+    implementation "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
+    implementation "com.android.support:cardview-v7:$rootProject.ext.supportLibraryVersion"
+    implementation "com.android.support:design:$rootProject.ext.supportLibraryVersion"
+    implementation "com.android.support:recyclerview-v7:$rootProject.ext.supportLibraryVersion"
+    implementation "com.android.support:support-v4:$rootProject.ext.supportLibraryVersion"
+    implementation "com.google.guava:guava:$rootProject.ext.guavaVersion"
+    testImplementation "junit:junit:$rootProject.ext.junitVersion"
 
     //For Lifecycles, LiveData, and ViewModel
-    compile "android.arch.lifecycle:runtime:$rootProject.ext.archLifecycleVersion"
-    compile "android.arch.lifecycle:extensions:$rootProject.ext.archLifecycleVersion"
+    implementation "android.arch.lifecycle:runtime:$rootProject.ext.archLifecycleVersion"
+    implementation "android.arch.lifecycle:extensions:$rootProject.ext.archLifecycleVersion"
     annotationProcessor "android.arch.lifecycle:compiler:$rootProject.ext.archLifecycleVersion"
     //For Room
-    //compile "android.arch.persistence.room:runtime:$rootProject.ext.roomVersion"
+    //implementation "android.arch.persistence.room:runtime:$rootProject.ext.roomVersion"
     //annotationProcessor "android.arch.persistence.room:compiler:$rootProject.ext.roomVersion"
     //For Room RxJava support, add:
-    //compile "android.arch.persistence.room:rxjava2:$rootProject.ext.roomVersion"
-    //androidTestCompile "android.arch.persistence.room:testing:$rootProject.ext.roomVersion" //gson2.8.0
+    //implementation "android.arch.persistence.room:rxjava2:$rootProject.ext.roomVersion"
+    //androidTestImplementation "android.arch.persistence.room:testing:$rootProject.ext.roomVersion" //gson2.8.0
 
-    //ARouter
-    compile 'com.alibaba:arouter-api:1.2.2'
-    annotationProcessor 'com.alibaba:arouter-compiler:1.1.3'
+    //ARouter: https://github.com/alibaba/ARouter
+    implementation 'com.alibaba:arouter-api:1.3.1'
+    annotationProcessor 'com.alibaba:arouter-compiler:1.1.4'
 
-    //ButterKnife
-    compile 'com.jakewharton:butterknife:8.8.1'
+    //ButterKnife  https://github.com/JakeWharton/butterknife
+    implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
-    //Dagger2
-    compile 'com.google.dagger:dagger-android:2.11'
-    compile 'com.google.dagger:dagger-android-support:2.11' // if you use the support libraries
-    provided 'com.google.dagger:dagger-compiler:2.11' //solve conflict with butterknife
-    annotationProcessor 'com.google.dagger:dagger-android-processor:2.11'
+    //Dagger2: https://github.com/google/dagger
+    // Dagger Dependencies (Dependency Injection)
+    implementation 'com.google.dagger:dagger:2.16'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.16'
+    implementation 'com.google.dagger:dagger-android:2.16'
+    annotationProcessor 'com.google.dagger:dagger-android-processor:2.16'
+    implementation 'com.google.dagger:dagger-android-support:2.16' // if you use the support libraries
+    annotationProcessor 'com.google.dagger:dagger-android-processor:2.16'
+
+//    implementation 'com.google.dagger:dagger:2.12'
+//    annotationProcessor 'com.google.dagger:dagger-compiler:2.12'
+//    implementation 'com.google.dagger:dagger-android:2.12'
+//    annotationProcessor 'com.google.dagger:dagger-android-processor:2.12'
+//    implementation 'com.google.dagger:dagger-android-support:2.11'
+//    annotationProcessor 'com.google.dagger:dagger-android-support:2.11'
 
 
+    //OkHttp3  https://github.com/square/okhttp
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    //testImplementation 'com.squareup.okhttp3:mockwebserver:3.10.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
 
-    //OkHttp3
-    compile 'com.squareup.okhttp3:okhttp:3.8.1'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.8.1'
+    //Retrofit2 https://github.com/square/retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'  //gson2.7
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+    //implementation 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
 
-    //Retrofit2
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.3.0'  //gson2.7
-    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
-    //compile 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0'
+    //RxJava  https://github.com/ReactiveX/RxJava
+    implementation "io.reactivex.rxjava2:rxjava:2.1.13"
 
-    //RxJava
-    compile "io.reactivex.rxjava2:rxjava:2.1.3"
-
-    //RxAndroid
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    //RxAndroid https://github.com/ReactiveX/RxAndroid
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
 
     //RxBinding
     //Platform bindings:
-    //compile 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
+    //implementation 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
     //'support-v4' library bindings:
-    //compile 'com.jakewharton.rxbinding2:rxbinding-support-v4:2.0.0'
+    //implementation 'com.jakewharton.rxbinding2:rxbinding-support-v4:2.0.0'
     //'appcompat-v7' library bindings:
-    //compile 'com.jakewharton.rxbinding2:rxbinding-appcompat-v7:2.0.0'
+    //implementation 'com.jakewharton.rxbinding2:rxbinding-appcompat-v7:2.0.0'
     //'design' library bindings:
-    //compile 'com.jakewharton.rxbinding2:rxbinding-design:2.0.0'
+    //implementation 'com.jakewharton.rxbinding2:rxbinding-design:2.0.0'
     //'recyclerview-v7' library bindings:
-    //compile 'com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:2.0.0'
+    //implementation 'com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:2.0.0'
     //'leanback-v17' library bindings:
-    //compile 'com.jakewharton.rxbinding2:rxbinding-leanback-v17:2.0.0'
+    //implementation 'com.jakewharton.rxbinding2:rxbinding-leanback-v17:2.0.0'
     //RxBinding
 
-    //EventBus
-    compile 'org.greenrobot:eventbus:3.0.0'
+    //EventBus https://github.com/greenrobot/EventBus
+    implementation 'org.greenrobot:eventbus:3.1.1'
 
-    //Glide requires a minimum API level of 10.
+    //Glide requires a minimum API level of 10.  https://github.com/bumptech/glide
     //Glide: download image,alternate: fresco
-    compile 'com.github.bumptech.glide:glide:4.0.0'
-    //compile 'com.android.support:support-v4:25.3.1'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0'
+    implementation 'com.github.bumptech.glide:glide:4.7.1'
+    //implementation 'com.android.support:support-v4:25.3.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
 
-    //GreenDao
-    compile 'org.greenrobot:greendao:3.2.2' // add library
+    //GreenDao  https://github.com/greenrobot/greenDAO
+    implementation 'org.greenrobot:greendao:3.2.2' // add library
     // This is only needed if you want to use encrypted databases
-    compile 'net.zetetic:android-database-sqlcipher:3.5.6'
+    implementation 'net.zetetic:android-database-sqlcipher:3.5.9'
 
-    //RxCache
-    compile "com.github.VictorAlbertos.RxCache:runtime:1.8.1-2.x"
+    //RxCache  https://github.com/VictorAlbertos/RxCache
+    implementation "com.github.VictorAlbertos.RxCache:runtime:1.8.3-2.x"
     //Because RxCache uses internally Jolyglot to serialize and deserialize objects, you need to add one of the next dependency to gradle.
-    compile 'com.github.VictorAlbertos.Jolyglot:gson:0.0.3'// To use Gson2.7
-    //compile 'com.github.VictorAlbertos.Jolyglot:jackson:0.0.3'// To use Jackson
-    //compile 'com.github.VictorAlbertos.Jolyglot:moshi:0.0.3'   // To use Moshi
+    implementation 'com.github.VictorAlbertos.Jolyglot:gson:0.0.4'// To use Gson2.7
+    //implementation 'com.github.VictorAlbertos.Jolyglot:jackson:0.0.4'// To use Jackson
+    //implementation 'com.github.VictorAlbertos.Jolyglot:moshi:0.0.4'   // To use Moshi
 
-    //logger and timber
-    compile 'com.orhanobut:logger:2.1.1'
-    //compile 'com.jakewharton.timber:timber:4.5.1'
+    //logger and timber https://github.com/orhanobut/logger
+    implementation 'com.orhanobut:logger:2.2.0'
+    //https://github.com/JakeWharton/timber
+    //implementation 'com.jakewharton.timber:timber:4.7.0'
+
+
+    // https://projectlombok.org/setup/android
+    //Go to File > Settings > Plugins
+    //Click on Browse repositories...
+    //Search for Lombok Plugin
+    //Click on Install plugin
+    //Restart Android Studio
+    compileOnly 'org.projectlombok:lombok:1.16.20'
+    annotationProcessor 'org.projectlombok:lombok:1.16.20'
 }

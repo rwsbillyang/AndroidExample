@@ -1,4 +1,4 @@
-package cn.niukid.activity;
+package cn.niukid.common.activity;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -114,7 +114,7 @@ public abstract class ShowProgressActivity extends BaseActivity {
     }
 
     private void handleError(int code, String message){
-        Logger.e( message);
+        Logger.w("err info:"+ message);
         hideProgress();
         Toast.makeText(this, message+"(code="+code+")", Toast.LENGTH_SHORT).show();
     }

@@ -1,4 +1,4 @@
-package cn.niukid;
+package cn.niukid.myexampleapplication;
 
 /**
  * Created by bill on 8/21/17.
@@ -7,9 +7,9 @@ package cn.niukid;
 public class GlobalConfig {
     public  static String BASE_URL = "https://api.github.com";
     public  static boolean enableArouterDebug = true;
-    public  static boolean enableOkHttpDebugMode = false;
-    public  static boolean enableOkHttpGzipRequest = false;
-    public  static boolean enableMODERN_TLS = false;
+    public  static boolean enableOkHttpDebugMode = true;
+    public  static boolean enableOkHttpGzipRequest = true;
+    public  static boolean enableMODERN_TLS = true;//Android5.0版本以上 否则https报错
 
     /**自定义证书*/
     public  static boolean enableCustomTrust = false;

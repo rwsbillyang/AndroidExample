@@ -1,4 +1,4 @@
-package cn.niukid.application;
+package cn.niukid.common.application;
 
 import android.app.Application;
 
@@ -12,8 +12,8 @@ import com.orhanobut.logger.PrettyFormatStrategy;
 
 import org.greenrobot.greendao.database.Database;
 
-import cn.niukid.GlobalConfig;
-import cn.niukid.httpclient.HttpClientModule;
+import cn.niukid.myexampleapplication.GlobalConfig;
+import cn.niukid.common.httpclient.HttpClientModule;
 import cn.niukid.myexampleapplication.BuildConfig;
 import cn.niukid.myexampleapplication.HttpBizModule;
 import cn.niukid.myexampleapplication.note.DaoMaster;
@@ -22,7 +22,7 @@ import cn.niukid.myexampleapplication.note.DaoSession;
 
 /**
  * 1.创建application时，需同时将其更新到manifest.xml中的标签<application></application>中：
- * android:name="cn.niukid.application.AppApplication"
+ * android:name="cn.niukid.common.application.AppApplication"
  * 2.添加各种权限，如：
  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>

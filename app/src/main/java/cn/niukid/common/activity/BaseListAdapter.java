@@ -1,4 +1,4 @@
-package cn.niukid.activity;
+package cn.niukid.common.activity;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

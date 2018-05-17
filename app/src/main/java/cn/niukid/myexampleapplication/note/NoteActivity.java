@@ -25,8 +25,8 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 
-import cn.niukid.activity.BaseActivity;
-import cn.niukid.application.AppApplication;
+import cn.niukid.common.activity.BaseActivity;
+import cn.niukid.common.application.AppApplication;
 import cn.niukid.myexampleapplication.R;
 import cn.niukid.myexampleapplication.RoutePathConfig;
 

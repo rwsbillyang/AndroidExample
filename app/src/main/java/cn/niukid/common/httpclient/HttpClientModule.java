@@ -1,8 +1,8 @@
-package cn.niukid.httpclient;
+package cn.niukid.common.httpclient;
 
 
 import android.app.Application;
-import android.util.Log;
+import android.os.Build;
 
 import com.orhanobut.logger.Logger;
 
@@ -16,7 +16,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
@@ -24,7 +26,8 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 
-import cn.niukid.GlobalConfig;
+import cn.niukid.common.Tls12SocketFactory;
+import cn.niukid.myexampleapplication.GlobalConfig;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.Cache;
@@ -38,8 +41,6 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 
 /**
  * Created by bill on 8/21/17.
@@ -101,15 +102,44 @@ public class HttpClientModule {
         //http://www.jianshu.com/p/5ebcd282ea56
         //Android5.0版本以上以及一个类似先进网路服务器
         if (GlobalConfig.enableMODERN_TLS){
-            ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
-                    .tlsVersions(TlsVersion.TLS_1_2)
-                    .cipherSuites(
-                            CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
-                            CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
-                            CipherSuite.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256
-                    ).build();
-            builder.connectionSpecs(Collections.singletonList(spec));
+            if(Build.VERSION.SDK_INT >= 22)
+            {
+                ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+                        .tlsVersions(TlsVersion.TLS_1_2)
+                        .cipherSuites(
+                                CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+                                CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+                                CipherSuite.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256
+                        ).build();
+                builder.connectionSpecs(Collections.singletonList(spec));
+
+            }else if (Build.VERSION.SDK_INT >= 16 ) {
+                try {
+                    SSLContext sc = SSLContext.getInstance("TLSv1.2");
+                    sc.init(null, null, null);
+
+                    builder.sslSocketFactory(new Tls12SocketFactory(sc.getSocketFactory()));//socketFactory
+
+                    ConnectionSpec cs = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+                            .tlsVersions(TlsVersion.TLS_1_2)
+                            .build();
+
+                    List<ConnectionSpec> specs = new ArrayList<>();
+                    specs.add(cs);
+                    specs.add(ConnectionSpec.COMPATIBLE_TLS);
+                    specs.add(ConnectionSpec.CLEARTEXT);
+
+                    builder.connectionSpecs(specs);
+                } catch (Exception exc) {
+                    Logger.e("Error while setting TLS 1.2, "+exc.getMessage());
+                }
+            }else
+            {
+                Logger.e("Build.VERSION.SDK_INT="+Build.VERSION.SDK_INT+", Not Support TLS");
+            }
+
         }
+
         if (GlobalConfig.enableCustomTrust){
             builder.socketFactory(getSSLSocketFactory(application, GlobalConfig.CERTIFICATES));
         }
@@ -125,7 +155,7 @@ public class HttpClientModule {
     @Singleton
     @Provides
     public Retrofit provideRetrofit(OkHttpClient okHttpClient){
-        Log.d(TAG,"provideRetrofit...okHttpClient="+okHttpClient);
+        Logger.d("provideRetrofit...okHttpClient="+okHttpClient);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(GlobalConfig.BASE_URL)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create()) // 添加Rx适配器
@@ -147,16 +177,19 @@ public class HttpClientModule {
         }
     };
 
+
+
+
+
     /**
      * 比如现在我们有个证书media.bks，首先需要将其放在res/raw目录下，当然你可以可以放在assets目录下。
      * Java本身支持的证书格式jks，但是遗憾的是在android当中并不支持jks格式正式，而是需要bks格式的证书。
      * 因此我们需要将jks证书转换成bks格式证书
      *
      * http://blog.csdn.net/dd864140130/article/details/52625666
+     * https://blog.csdn.net/lmj623565791/article/details/48129405
      * */
     protected  SSLSocketFactory getSSLSocketFactory(Application application, int[] certificates) {
-
-
         //CertificateFactory用来证书生成
         CertificateFactory certificateFactory;
         try {
@@ -196,4 +229,6 @@ public class HttpClientModule {
         }
         return null;
     }
+
+
 }
